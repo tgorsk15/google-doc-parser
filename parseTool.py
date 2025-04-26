@@ -15,7 +15,7 @@ import pandas as pd
 
 
 # def parseDoc(url):
-#     fileContent = pd.read_html(url, encoding='utf-8', header=0)
+#     fileContent = pd.read_html(url, encoding='utf-8', header=0, flavor='bs4')
 
 #     for index, row in fileContent[0].iterrows():
 #         coords.append([row[0], row[2]])
@@ -41,27 +41,28 @@ import pandas as pd
 # def generateGrid(bigX, bigY):
 #     print('x-bound:', bigX, 'y-bound:', bigY)
 #     grid = [[0 for _ in range(bigX + 1)] for _ in range(bigY + 1)]
-    # return grid
+#     return grid
 
 # print(parseDoc('https://docs.google.com/document/d/e/2PACX-1vQGUck9HIFCyezsrBSnmENk5ieJuYwpt7YHYEzeNJkIb9OSDdx-ov2nRNReKQyey-cwJOoEKUhLmN9z/pub'))
 
 
-tableContent = pd.read_html("https://docs.google.com/document/d/e/2PACX-1vQGUck9HIFCyezsrBSnmENk5ieJuYwpt7YHYEzeNJkIb9OSDdx-ov2nRNReKQyey-cwJOoEKUhLmN9z/pub", header=0, flavor='bs4')
 
-dataSorted = tableContent[0].sort_values(by=["y-coordinate","x-coordinate"], ignore_index=True)
+def parseDoc(url):
+    tableContent = pd.read_html(url, header=0, flavor='bs4')
 
-xCoord = dataSorted['x-coordinate']
-yCoord = dataSorted['y-coordinate']
-char = dataSorted['Character']
+    dataSorted = tableContent[0].sort_values(by=["y-coordinate","x-coordinate"], ignore_index=True)
 
-for i in range(1, len(yCoord)):
-    if ((xCoord[i] == 12) & (yCoord[i] == 0)):
-        print(" ", end='')
-    if xCoord[i] - xCoord[i - 1] != 1:
-        print(" " * int((xCoord[i]) - (xCoord[i - 1]) - 1), end='')
-    if (yCoord[i] != (yCoord[i - 1])):
-        print('\r')
-    print (char[i], end='') 
-# print('\n')
+    xCoord = dataSorted['x-coordinate']
+    yCoord = dataSorted['y-coordinate']
+    char = dataSorted['Character']
+
+    for i in range(1, len(yCoord)):
+        if xCoord[i] - xCoord[i - 1] != 1:
+            print(" " * int((xCoord[i]) - (xCoord[i - 1]) - 1), end='')
+        if (yCoord[i] != (yCoord[i - 1])):
+            print('\r')
+        print (char[i], end='') 
+
+print(parseDoc('https://docs.google.com/document/d/e/2PACX-1vQGUck9HIFCyezsrBSnmENk5ieJuYwpt7YHYEzeNJkIb9OSDdx-ov2nRNReKQyey-cwJOoEKUhLmN9z/pub'))
 
 
