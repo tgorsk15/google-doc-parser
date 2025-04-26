@@ -7,9 +7,17 @@
 # create a "board", where the width is the highest x-coordinate found in the Doc
 # height will be the highest y-coordinate found
 
+import pandas as pd
+
+coords = []
+chars = []
+
+
 def parseDoc():
     return 1
 
 print(parseDoc())
 
+
+print('hi')
 
