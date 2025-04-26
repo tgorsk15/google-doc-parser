@@ -13,10 +13,13 @@ coords = []
 chars = []
 
 
-def parseDoc():
+def parseDoc(url):
+    print(url)
+    fileContent = pd.read_html(url, encoding='utf-8')
+    print(fileContent)
     return 1
 
-print(parseDoc())
+print(parseDoc('https://docs.google.com/document/d/e/2PACX-1vQGUck9HIFCyezsrBSnmENk5ieJuYwpt7YHYEzeNJkIb9OSDdx-ov2nRNReKQyey-cwJOoEKUhLmN9z/pub'))
 
 
 print('hi')
