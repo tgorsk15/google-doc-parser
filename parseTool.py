@@ -10,16 +10,25 @@
 import pandas as pd
 
 coords = []
-# bigX and bigY will keep track of largest x and y boundaries... actually this might not work
-# because grid size needs to be determined right away
-# bigX = 0
-# bigY = 0
+chars = []
+
 
 
 def parseDoc(url):
-    print('start')
-    fileContent = pd.read_html(url, encoding='utf-8')
-    print(fileContent)
+    fileContent = pd.read_html(url, encoding='utf-8', header=0)
+
+    for index, row in fileContent[0].iterrows():
+        coords.append([row[0], row[2]])
+        chars.append(row[1])
+
+    # find boundaries of the grid:
+    bigX = max(point[0] for point in coords)
+    bigY = max(point[1] for point in coords)
+
+    grid = generateGrid()
+    print('coords:', coords, ' chars:', chars)    
+
+
     print('Here are items 3-5', fileContent[0].iloc[2:5])
     return 'done'
 
