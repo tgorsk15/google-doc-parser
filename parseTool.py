@@ -9,40 +9,59 @@
 
 import pandas as pd
 
-coords = []
-chars = []
+# coords = []
+# chars = []
 
 
 
-def parseDoc(url):
-    fileContent = pd.read_html(url, encoding='utf-8', header=0)
+# def parseDoc(url):
+#     fileContent = pd.read_html(url, encoding='utf-8', header=0)
 
-    for index, row in fileContent[0].iterrows():
-        coords.append([row[0], row[2]])
-        chars.append(row[1])
+#     for index, row in fileContent[0].iterrows():
+#         coords.append([row[0], row[2]])
+#         chars.append(row[1])
 
-    # find boundaries of the grid:
-    bigX = max(point[0] for point in coords)
-    bigY = max(point[1] for point in coords)
+#     # find boundaries of the grid:
+#     bigX = max(point[0] for point in coords)
+#     bigY = max(point[1] for point in coords)
 
-    grid = generateGrid()
-    print('coords:', coords, ' chars:', chars)    
+#     grid = generateGrid(bigX, bigY)
+#     print(grid)
+#     # print('coords:', coords, ' chars:', chars)    
+
+#     for index, (x, y) in enumerate(coords):
+#         grid[y][x] = chars[index]
+#     print(grid)
+
+#     # print('Here are items 3-5', fileContent[0].iloc[2:5])
+#     return 'done'
 
 
-    print('Here are items 3-5', fileContent[0].iloc[2:5])
-    return 'done'
+
+# def generateGrid(bigX, bigY):
+#     print('x-bound:', bigX, 'y-bound:', bigY)
+#     grid = [[0 for _ in range(bigX + 1)] for _ in range(bigY + 1)]
+    # return grid
+
+# print(parseDoc('https://docs.google.com/document/d/e/2PACX-1vQGUck9HIFCyezsrBSnmENk5ieJuYwpt7YHYEzeNJkIb9OSDdx-ov2nRNReKQyey-cwJOoEKUhLmN9z/pub'))
 
 
-def handleRow(row):
-    print('handeling')
+tableContent = pd.read_html("https://docs.google.com/document/d/e/2PACX-1vQGUck9HIFCyezsrBSnmENk5ieJuYwpt7YHYEzeNJkIb9OSDdx-ov2nRNReKQyey-cwJOoEKUhLmN9z/pub", header=0, flavor='bs4')
 
+dataSorted = tableContent[0].sort_values(by=["y-coordinate","x-coordinate"], ignore_index=True)
 
-def generateGrid(bigX, bigY):
-    print('x-bound:', bigX, 'y-bound:', bigY)
-    # create grid here
-    return grid
+xCoord = dataSorted['x-coordinate']
+yCoord = dataSorted['y-coordinate']
+char = dataSorted['Character']
 
-print(parseDoc('https://docs.google.com/document/d/e/2PACX-1vQGUck9HIFCyezsrBSnmENk5ieJuYwpt7YHYEzeNJkIb9OSDdx-ov2nRNReKQyey-cwJOoEKUhLmN9z/pub'))
-
+for i in range(1, len(yCoord)):
+    if ((xCoord[i] == 12) & (yCoord[i] == 0)):
+        print(" ", end='')
+    if xCoord[i] - xCoord[i - 1] != 1:
+        print(" " * int((xCoord[i]) - (xCoord[i - 1]) - 1), end='')
+    if (yCoord[i] != (yCoord[i - 1])):
+        print('\r')
+    print (char[i], end='') 
+# print('\n')
 
 
